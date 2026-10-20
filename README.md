@@ -1,7 +1,6 @@
 # ReviewLens
 
 **Sentiment analysis of Flipkart electronics product reviews**
-CSE4039 Advanced Text and Social Media Analytics, lab project (VIT-AP)
 
 ReviewLens reads a customer review and predicts whether it is **positive, neutral or negative**. It is trained on over 67,000 Flipkart electronics reviews, using the customer's star rating as the label.
 
@@ -43,10 +42,12 @@ reviewlens/
 ├── notebooks/
 │   ├── 01_data_preparation.ipynb   <- load, check, label, filter, clean the data
 │   ├── 02_baseline_model.ipynb     <- split, TF-IDF, train, evaluate, error analysis
-│   └── 03_model_comparison.ipynb   <- Naive Bayes vs SVM vs Logistic Regression, tuning
+│   ├── 03_model_comparison.ipynb   <- Naive Bayes vs SVM vs Logistic Regression, tuning
+│   └── 04_aspect_sentiment.ipynb   <- what customers say about battery, camera, price, ...
 ├── src/                       <- reusable code used by the notebooks
 │   ├── preprocess.py               <- text cleaning (keeps negations)
-│   └── electronics_filter.py       <- keyword rules to select electronics products
+│   ├── electronics_filter.py       <- keyword rules to select electronics products
+│   └── aspects.py                  <- finds which aspect (battery, camera, ...) a clause is about
 ├── docs/
 │   ├── GLOSSARY.md                 <- every ML term used, in plain English
 │   └── VIVA_QA.md                  <- likely questions and answers about this project
@@ -72,7 +73,7 @@ reviewlens/
 
 2. **Get the data.** Download the Kaggle dataset *Flipkart Product Customer Reviews Dataset* and save the CSV as `data/raw/Dataset-SA 2.csv` (or change `RAW_PATH` in notebook 01).
 
-3. **Run the notebooks in order:** `jupyter notebook`, then open `notebooks/01_data_preparation.ipynb`, then `02_baseline_model.ipynb`, then `03_model_comparison.ipynb`, running each cell from top to bottom.
+3. **Run the notebooks in order:** `jupyter notebook`, then open `notebooks/01_data_preparation.ipynb`, then `02_baseline_model.ipynb`, then `03_model_comparison.ipynb`, then `04_aspect_sentiment.ipynb`, running each cell from top to bottom.
 
 ## Dataset
 

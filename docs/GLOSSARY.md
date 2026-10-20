@@ -1,4 +1,4 @@
-# Glossary: terms used in this project, in plain English
+# Glossary: terms used in this project
 
 **Accuracy**: share of reviews the model got right. Misleading when one class dominates (here about 78% of reviews are positive).
 
@@ -61,3 +61,9 @@
 **Linear SVM (support vector machine)**: a classifier that finds the straight boundary between classes with the widest margin. Often very strong on TF-IDF features.
 
 **Overfitting**: when a model memorises the training data and does worse on new data.
+
+**Aspect-based sentiment analysis (ABSA)**: finding the sentiment toward each *aspect* of a product (battery, camera, price) instead of one score for the whole review.
+
+**Clause**: a short piece of a sentence about roughly one thing. We split reviews into clauses at punctuation and at words like "but", so each aspect gets its own sentiment.
+
+**Net score**: in our aspect table, the share of positive mentions minus the share of negative mentions. Above 0 means mostly praised, below 0 means mostly criticised.
