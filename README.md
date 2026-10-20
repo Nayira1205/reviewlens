@@ -42,7 +42,8 @@ reviewlens/
 ├── requirements.txt           <- Python libraries needed
 ├── notebooks/
 │   ├── 01_data_preparation.ipynb   <- load, check, label, filter, clean the data
-│   └── 02_baseline_model.ipynb     <- split, TF-IDF, train, evaluate, error analysis
+│   ├── 02_baseline_model.ipynb     <- split, TF-IDF, train, evaluate, error analysis
+│   └── 03_model_comparison.ipynb   <- Naive Bayes vs SVM vs Logistic Regression, tuning
 ├── src/                       <- reusable code used by the notebooks
 │   ├── preprocess.py               <- text cleaning (keeps negations)
 │   └── electronics_filter.py       <- keyword rules to select electronics products
@@ -71,7 +72,7 @@ reviewlens/
 
 2. **Get the data.** Download the Kaggle dataset *Flipkart Product Customer Reviews Dataset* and save the CSV as `data/raw/Dataset-SA 2.csv` (or change `RAW_PATH` in notebook 01).
 
-3. **Run the notebooks in order:** `jupyter notebook`, then open `notebooks/01_data_preparation.ipynb` and then `notebooks/02_baseline_model.ipynb`, running each cell from top to bottom.
+3. **Run the notebooks in order:** `jupyter notebook`, then open `notebooks/01_data_preparation.ipynb`, then `02_baseline_model.ipynb`, then `03_model_comparison.ipynb`, running each cell from top to bottom.
 
 ## Dataset
 

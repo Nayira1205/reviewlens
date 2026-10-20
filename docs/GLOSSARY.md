@@ -51,3 +51,13 @@
 **Vectorizer**: the tool that converts text into numbers (here `TfidfVectorizer`).
 
 **VADER**: a rule-based tool that scores sentiment from a dictionary of words. Used by the dataset's author to create the `Sentiment` column, which we do not train on.
+
+**Complement Naive Bayes**: a fast text classifier that uses word-count statistics for each class and assumes words are independent of each other. The "complement" version is designed for imbalanced data.
+
+**Cross-validation**: splitting the training data into parts (folds) and letting each part take a turn as a mini test set. Used to choose settings without touching the real test set.
+
+**Hyperparameter**: a setting we choose before training (for example `C` in an SVM), as opposed to what the model learns from the data.
+
+**Linear SVM (support vector machine)**: a classifier that finds the straight boundary between classes with the widest margin. Often very strong on TF-IDF features.
+
+**Overfitting**: when a model memorises the training data and does worse on new data.
