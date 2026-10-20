@@ -7,4 +7,4 @@ data/raw/*
 data/processed/*
 models/*.pkl
 !**/.gitkeep
-EOF
+EOFdocs/GLOSSARY.md
