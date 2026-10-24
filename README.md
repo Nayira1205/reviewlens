@@ -9,6 +9,9 @@
 
 ReviewLens reads a customer review and predicts whether it is **positive, neutral or negative**, and it finds **what** customers are talking about (battery, camera, price, delivery, ...). It is trained on more than 67,000 Flipkart electronics reviews, using the customer's star rating as the label.
 
+**Live demo:** https://reviewlens-4gnunrorggoxapgqfdwyis.streamlit.app/
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://reviewlens-4gnunrorggoxapgqfdwyis.streamlit.app/)
 
 ## Table of contents
 
@@ -25,7 +28,6 @@ ReviewLens reads a customer review and predicts whether it is **positive, neutra
 - [Roadmap](#roadmap)
 - [Tech stack](#tech-stack)
 - [Acknowledgements](#acknowledgements)
-- [Author](#author)
 
 ## Why this project
 
@@ -257,7 +259,6 @@ reviewlens/
 - [ ] Improve the neutral class
 - [ ] Transformer model (DistilBERT) and comparison
 - [x] Streamlit app: paste a review and see its sentiment and aspects
-- [ ] Repeat the pipeline on food and agriculture products
 
 ## Tech stack
 
