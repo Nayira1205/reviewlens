@@ -36,7 +36,7 @@ ASPECTS = {
     "price":        r"\bprice\b|\bvalue for money\b|\bmoney\b|\bcost\b|\bbudget\b|\bworth\b|\bcheap\b|\bexpensive\b|\baffordable\b",
     "build quality": r"\bbuild\b|\bmaterial\b|\bplastic\b|\bsturdy\b|\bdurab\w*\b|\bstrong\b|\bquality\b",
     "design":       r"\bdesign\b|\blooks?\b|\blooking\b|\bcolou?rs?\b|\bsize\b|\bweight\b|\bslim\b|\bstylish\b|\bcompact\b",
-    "connectivity": r"\bbluetooth\b|\bwi-?fi\b|\bconnect\w*\b|\bsignal\b|\brange\b|\bpairing\b",
+    "connectivity": r"\bbluetooth\b|\bwi-?fi\b|\bconnect\w*\b|\bsignal\b|\bpairing\b",
     "delivery":     r"\bdeliver\w*\b|\bpackag\w*\b|\bpacking\b|\bpacked\b|\bseller\b|\bcourier\b",
     "heating":      r"\bheat\w*\b|\bhot\b",
     "cooling":      r"\bcooling\b|\bair ?flow\b",
@@ -46,7 +46,7 @@ ASPECTS = {
 _COMPILED = {name: re.compile(pattern) for name, pattern in ASPECTS.items()}
 
 # Pieces of text that start a new clause.
-_STRONG_SPLIT = re.compile(r"[.,;!?]+|\bbut\b|\bhowever\b|\balthough\b|\bthough\b|\bwhile\b")
+_STRONG_SPLIT = re.compile(r"[.,;!?]+|\bbut\b|\bhowever\b|\balthough\b|\bthough\b|\bwhile\b|\botherwise\b|\bexcept\b")
 
 # "sound quality" is about SOUND, not build quality, so we shorten these phrases first.
 _QUALITY_PHRASE = re.compile(r"\b(sound|audio|mic|picture|video|camera|display|screen|print)\s+quality\b")

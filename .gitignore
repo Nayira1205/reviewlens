@@ -7,3 +7,4 @@ data/raw/*
 data/processed/*
 models/*.pkl
 !**/.gitkeep
+!models/baseline_tfidf_lr.pkl

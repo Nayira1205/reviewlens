@@ -15,6 +15,7 @@ ReviewLens reads a customer review and predicts whether it is **positive, neutra
 - [Why this project](#why-this-project)
 - [Features](#features)
 - [Results](#results)
+- [Aspect analysis](#aspect-analysis)
 - [Quick start](#quick-start)
 - [How it works](#how-it-works)
 - [Dataset](#dataset)
@@ -52,19 +53,51 @@ All models use the same split (53,920 training reviews and 13,481 test reviews; 
 | Complement Naive Bayes | strict | 0.829 | 0.617 | 0.739 | 0.199 | 0.914 |
 | Linear SVM | normal | 0.875 | 0.678 | 0.815 | 0.280 | 0.939 |
 | Linear SVM | strict | 0.844 | 0.654 | 0.782 | 0.258 | 0.923 |
+| Linear SVM (tuned) | normal | 0.883 | 0.686 | 0.828 | 0.287 | 0.943 |
+| Linear SVM (tuned) | strict | 0.861 | 0.674 | 0.805 | 0.288 | 0.930 |
 
 A baseline that always predicts "positive" scores a macro-F1 of only 0.292.
 
 **Key findings**
 
-- The three models are within about 4 points of macro-F1 of each other, so the algorithm matters less than the data.
-- On the strict test set (reviews whose exact text never appeared in training), Logistic Regression and the Linear SVM are about tied. The SVM's lead on the normal test set partly comes from repeated generic phrases such as "good" and "nice".
+- The models range from 0.638 to 0.686 macro-F1, so the algorithm matters less than the data.
+- Tuning the SVM's regularisation strength with cross-validation on the training data (best C = 0.1, versus the default 1.0) raised its strict-test macro-F1 from 0.654 to 0.674. The tuned SVM is the best model on both test sets, 1.4 to 2.7 points ahead of Logistic Regression.
+- The SVM's lead on the normal test set partly comes from repeated generic phrases such as "good" and "nice"; the strict test set (texts never seen in training) gives the more honest comparison.
 - Higher accuracy does not mean a better model: Naive Bayes beats Logistic Regression on accuracy but not on macro-F1.
-- **Neutral is the hardest class for every model** (F1 about 0.2 to 0.3). 3-star reviews are often worded politely, and identical text receives different star ratings from different people, so the limit comes mainly from label noise in the data.
+- **Neutral is the hardest class for every model** (F1 about 0.2 to 0.3, including the tuned SVM). 3-star reviews are often worded politely, and identical text receives different star ratings from different people, so the limit comes mainly from label noise in the data.
 
 ![Model comparison](reports/model_comparison.png)
 
+## Aspect analysis
+
+Each review is split into clauses, and the trained model scores every clause that mentions an aspect. 27,842 of the 67,401 reviews (41%) mention at least one aspect, giving 45,935 scored mentions.
+
+| Aspect | Mentions | Negative % | Neutral % | Positive % | Net score |
+|---|---|---|---|---|---|
+| delivery | 3,635 | 9.0 | 1.7 | 89.3 | 80.3 |
+| design | 3,888 | 7.9 | 4.3 | 87.7 | 79.8 |
+| price | 10,221 | 12.5 | 2.2 | 85.3 | 72.8 |
+| performance | 3,804 | 13.7 | 5.5 | 80.7 | 67.0 |
+| cooling | 516 | 12.8 | 9.7 | 77.5 | 64.7 |
+| sound | 6,789 | 16.6 | 5.3 | 78.0 | 61.4 |
+| camera | 871 | 18.6 | 4.5 | 76.9 | 58.3 |
+| display | 1,742 | 18.0 | 8.3 | 73.8 | 55.8 |
+| build quality | 6,747 | 20.6 | 4.3 | 75.2 | 54.6 |
+| battery | 2,890 | 21.2 | 6.0 | 72.8 | 51.6 |
+| connectivity | 2,600 | 32.7 | 6.2 | 61.1 | 28.4 |
+| noise | 781 | 32.9 | 14.7 | 52.4 | 19.5 |
+| heating | 1,451 | 36.5 | 14.8 | 48.7 | 12.3 |
+
+Net score = % positive minus % negative.
+
+- Most aspect mentions are positive, in line with the 78% positive reviews overall. The useful comparison is with the overall negative rate of 14.7%.
+- **Heating (36.5% negative), noise (32.9%) and connectivity (32.7%) are criticised more than twice as often as average.** Battery, build quality, camera and display are also above average.
+- Delivery, design and price receive the least criticism.
+- Cooling, camera and noise have fewer than 900 mentions each, so their percentages are less stable.
+
 ![Aspect sentiment](reports/aspect_sentiment.png)
+
+**Validation.** A manual check of 30 random aspect clauses found about 80% fully correct (aspect tag and sentiment). The errors exposed two keyword problems ("price range" tagged as connectivity, and the verb "delivers" tagged as delivery), which were fixed and the analysis re-run. Remaining weaknesses: run-on clauses with mixed sentiment, and occasional wrong keyword matches.
 
 ## Quick start
 
@@ -72,7 +105,7 @@ A baseline that always predicts "positive" scores a macro-F1 of only 0.292.
 
 ```bash
 # 1. Clone and enter the project
-git clone https://github.com/Nayira1205/reviewlens.git
+git clone https://github.com/<your-username>/reviewlens.git
 cd reviewlens
 
 # 2. Create and activate a virtual environment
@@ -103,6 +136,16 @@ Open and run each notebook from top to bottom (Kernel, then Restart and Run All)
 | 4 | `04_aspect_sentiment.ipynb` | Finds aspects in reviews and scores sentiment per aspect |
 
 Each notebook saves its output for the next one. Data files and trained models are not stored in the repository; they are regenerated by running the notebooks.
+
+### Try the app
+
+After running notebook 02 (which saves the model), start the web app:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+Paste a review to see its overall sentiment with the model's confidence, and the sentiment of each aspect it mentions.
 
 ## How it works
 
@@ -140,7 +183,8 @@ extract_aspect_clauses("Camera is great but battery is bad")
 
 ## Dataset
 
-Flipkart product reviews from Kaggle (://www.kaggle.comhttps/datasets/niraliivaghani/flipkart-product-customer-reviews-dataset), collected by scraping Flipkart.
+Flipkart product reviews from Kaggle (//www.kaggle.comhttps/datasets/niraliivaghani/flipkart-product-customer-reviews-dataset
+ author: niraliivaghani), collected by scraping Flipkart.
 
 | Column | Meaning |
 |---|---|
@@ -182,13 +226,14 @@ reviewlens/
 │   ├── 02_baseline_model.ipynb
 │   ├── 03_model_comparison.ipynb
 │   └── 04_aspect_sentiment.ipynb
+├── app/
+│   └── streamlit_app.py         web app to try the model on any review
 ├── src/
 │   ├── preprocess.py            text cleaning (keeps negations)
 │   ├── electronics_filter.py    keyword rules to select electronics products
 │   └── aspects.py               clause splitting and aspect detection
 ├── docs/
-│   ├── GLOSSARY.md              ML terms used, in plain English
-│   └── VIVA_QA.md               questions and answers about the project
+│   └── GLOSSARY.md              ML terms used, in plain English
 ├── reports/                     charts and result tables
 ├── data/                        raw and processed data (not tracked by Git)
 └── models/                      saved models (not tracked by Git)
@@ -211,17 +256,13 @@ reviewlens/
 - [x] Aspect-based sentiment analysis
 - [ ] Improve the neutral class
 - [ ] Transformer model (DistilBERT) and comparison
-- [ ] Streamlit app: paste a review and see its sentiment and aspects
+- [x] Streamlit app: paste a review and see its sentiment and aspects
 - [ ] Repeat the pipeline on food and agriculture products
 
 ## Tech stack
 
-Python, pandas, NumPy, scikit-learn, NLTK, matplotlib, seaborn, Jupyter.
+Python, pandas, NumPy, scikit-learn, NLTK, matplotlib, seaborn, Streamlit, Jupyter.
 
 ## Acknowledgements
 
-- Dataset: ://www.kaggle.comhttps/datasets/niraliivaghani/flipkart-product-customer-reviews-dataset 
-
-## Author
-
-**Nayira Sri**, B.Tech Computer Science and Business Systems, VIT-AP.
+- Dataset: //www.kaggle.comhttps/datasets/niraliivaghani/flipkart-product-customer-reviews-dataset(author: niraliivaghani).
